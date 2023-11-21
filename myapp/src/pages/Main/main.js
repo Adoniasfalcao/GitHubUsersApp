@@ -64,7 +64,7 @@ export default class Main extends Component {
       this.setState({users: [...users, data], newUser: ''});
       
     } catch (err) {
-      Alert.alert(`Erro ao adicionar um novo usuário... Erro: ${err}`);
+      Alert.alert(`Usuário não encontrado...`);
       console.tron.log(err);
 
     } finally {

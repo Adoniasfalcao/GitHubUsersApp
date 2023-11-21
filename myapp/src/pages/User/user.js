@@ -15,10 +15,10 @@ import {
   Author,
 } from './styles';
 
-export default function User({navigation}) {
+export default function User({navigation,route}) {
   const [stars, setStars] = useState();
   const [loading, setLoading] = useState(true);
-  const user = navigation.getState().routes[1].params.user;
+  const user = route.params.user;
 
   //Função para pegar as stars
   const getStarsInfo = async () => {
@@ -64,7 +64,7 @@ export default function User({navigation}) {
           data={stars}
           keyExtractor={star => String(star.id)}
           renderItem={({item}) => (
-            <Starred>
+            <Starred onPress={ () => {navigation.navigate('Repository',{item})}}>
               <OwnerAvatar source={{uri: item.owner.avatar_url}} />
               <Info>
                 <Title>{item.name}</Title>
