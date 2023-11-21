@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Alert, Keyboard, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   Container,
   Form,
@@ -24,10 +25,9 @@ export default class Main extends Component {
     loading: false,
   };
 
-  //Adição dos usuários no estado
+  //Adição dos usuários no estado: Surge quando o componente for montado
   async componentDidMount() {
     const users = await AsyncStorage.getItem('users');
-
     if (users) {
       this.setState({users: JSON.parse(users)});
     }
@@ -61,12 +61,32 @@ export default class Main extends Component {
         avatar: response.data.avatar_url,
       };
 
-      this.setState({users: [...users, data], newUser: ''});
-      
-    } catch (err) {
-      Alert.alert(`Usuário não encontrado...`);
-      console.tron.log(err);
+      //Verifica se há um usuário repetido
+      if (users.find(user => user.login === data.login)) {
+        Alert.alert(
+          `Erro ao adicionar usuário`,
+          `Usuário já adicionado, tente novamente`,
+          [
+            {
+              text: 'Conferir',
+            },
+          ],
+        );
+        return
+      } 
 
+      this.setState({users: [...users, data], newUser: ''});
+    } catch (err) {
+      Alert.alert(
+        `Erro ao adicionar usuário`,
+        `Confira o usuário pesquisado e tente novamente\n\nerror message:${err}`,
+        [
+          {
+            text: 'Conferir',
+          },
+        ],
+      );
+      console.tron.log(err);
     } finally {
       Keyboard.dismiss();
       this.setState({loading: false});
@@ -89,11 +109,11 @@ export default class Main extends Component {
             onSubmitEditing={this.handleAddUser}
           />
 
-          <SubmitButton onPress={this.handleAddUser} loading={loading}>
+          <SubmitButton onPress={this.handleAddUser}>
             {loading ? (
-              <ActivityIndicator color="#fff" size={42} />
+              <ActivityIndicator color="#fff" size={40} />
             ) : (
-              <Label>Adicionar</Label>
+              <Icon name="user-plus" size={36} />
             )}
           </SubmitButton>
         </Form>
