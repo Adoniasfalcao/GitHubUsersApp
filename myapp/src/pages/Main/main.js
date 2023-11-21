@@ -15,6 +15,8 @@ import {
   Bio,
   ProfileButton,
   ProfileButtonText,
+  RemoveButton,
+  RemoveButtonText,
 } from './styles';
 import api from '../../services/api';
 
@@ -28,6 +30,8 @@ export default class Main extends Component {
   //Adição dos usuários no estado: Surge quando o componente for montado
   async componentDidMount() {
     const users = await AsyncStorage.getItem('users');
+    const keys = await AsyncStorage.getAllKeys()
+    console.tron.log(keys)
     if (users) {
       this.setState({users: JSON.parse(users)});
     }
@@ -72,14 +76,14 @@ export default class Main extends Component {
             },
           ],
         );
-        return
-      } 
+        return;
+      }
 
       this.setState({users: [...users, data], newUser: ''});
     } catch (err) {
       Alert.alert(
         `Erro ao adicionar usuário`,
-        `Confira o usuário pesquisado e tente novamente\n\nerror message:${err}`,
+        `Confira o usuário pesquisado e tente novamente`,
         [
           {
             text: 'Conferir',
@@ -93,6 +97,11 @@ export default class Main extends Component {
     }
   };
 
+  handleRemoveUser = (login) => {
+    this.setState(prevState => ({
+      users: prevState.users.filter(user => user.login !== login)
+    }))
+  }
   render() {
     const {users, newUser, loading} = this.state;
 
@@ -130,8 +139,15 @@ export default class Main extends Component {
               <ProfileButton onPress={() => this.handleNavigate(item)}>
                 <ProfileButtonText>Ver perfil</ProfileButtonText>
               </ProfileButton>
+              <RemoveButton
+                onPress={() => this.handleRemoveUser(item.login)}>
+                <RemoveButtonText>
+                  Remover usuário <Icon name="trash-o" size={16} />
+                </RemoveButtonText>
+              </RemoveButton>
             </User>
           )}
+          ListEmptyComponent={<Name style={{marginTop:320}}>Não há usuários adicionados</Name>}
         />
       </Container>
     );

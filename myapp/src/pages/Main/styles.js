@@ -88,3 +88,21 @@ color: #fff;
 text-transform: uppercase;
 
 `;
+
+export const RemoveButton = styled.TouchableOpacity`
+margin-top: 16px;
+align-self: stretch;
+border-radius: 4px;
+background: #f53030;
+justify-content: center;
+align-items: center;
+height: 36px;
+
+`;
+
+export const RemoveButtonText = styled.Text`
+font-size: 14px;
+color: #fff;
+text-transform: uppercase;
+
+`;
