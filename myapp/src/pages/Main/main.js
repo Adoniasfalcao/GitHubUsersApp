@@ -79,7 +79,7 @@ export default class Main extends Component {
         return;
       }
 
-      this.setState({users: [...users, data], newUser: ''});
+      this.setState({users: [data,...users], newUser: ''});
     } catch (err) {
       Alert.alert(
         `Erro ao adicionar usuário`,
